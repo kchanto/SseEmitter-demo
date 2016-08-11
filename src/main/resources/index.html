@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SseEmitter - Proof of concept</title>
+<script src="EventSource.js"></script>
+</head>
+
+<body>
+<pre>
+<button onclick='source.close();document.getElementById("log").innerHTML = "Messages from "+theUrl;'>Stop</button>
+<div id="log"> </div>
+<script>
+
+
+var sources =["/mine/5", "/obs/5", "/notif/"];
+var idx = getParameterByName("idx");
+var theUrl = sources[idx];
+if(theUrl == undefined){
+	theUrl = sources[0];
+}
+
+document.getElementById('log').innerHTML = "Messages from "+theUrl;
+
+var source = new EventSource("http://localhost:8080"+theUrl);
+source.onmessage = function (event) {
+// 	console.log(event)
+	document.getElementById('log').innerHTML += '<br>'+event.data;
+};
+
+
+function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+//document.writeln('<button onclick="source.close()">Stop</button>');
+
+</script>
+</pre>
+
+
+</body>
+
+</html>
